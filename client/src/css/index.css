@@ -1,0 +1,8 @@
+@import '~antd/dist/antd.css'; 
+@import './bootstrap-grid.css';
+
+.login-card {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+}

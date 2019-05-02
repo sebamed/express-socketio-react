@@ -1,6 +1,6 @@
 module.exports = (socket) => {
 
-    socket.on('connect', data => {
+    socket.on('connected', data => {
         console.log(data)
     });
 
