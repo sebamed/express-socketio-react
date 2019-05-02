@@ -24,5 +24,5 @@ io.on('connection', socket => {
 
     var connectionSocket = require('./sockets/connection')(socket)
 
-})
+});
 

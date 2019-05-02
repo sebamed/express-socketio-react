@@ -1,7 +1,7 @@
 module.exports = (socket) => {
 
-    io.sockets.on('connect', data => {
+    socket.on('connect', data => {
         console.log(data)
-    })
-    
-}
+    });
+
+};
