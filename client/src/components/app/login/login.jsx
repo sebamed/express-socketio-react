@@ -1,22 +1,14 @@
 import React from 'react';
 import { Form, Button, Input, Card } from 'antd';
+import { withRouter } from 'react-router-dom';
 import BasicField from '../../shared/form/input'
 import { checkForm } from '../../../util/helpers'
-import io from 'socket.io-client';
 
 class Login extends React.Component {
 
-    constructor(props) {
-        super(props);
-
-        this.state = {
-            socket: io('http://localhost:4000')
-        }
-    }
-
     handleSubmit = (values) => {
-        console.log(values)
-        this.state.socket.emit('connected', {field: 'test'});
+        this.props.goOnline(values.email)
+        this.props.history.push('/chat-app')
     }
 
     render() {
@@ -68,4 +60,4 @@ class Login extends React.Component {
 
 }
 
-export default Form.create({ name: 'login' })(Login);
+export default withRouter(Form.create({ name: 'login' })(Login));
