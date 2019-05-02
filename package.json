@@ -1,0 +1,15 @@
+{
+  "name": "express-socketio-reactjs",
+  "version": "1.0.0",
+  "description": "Diving into sockets with express + React JS",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "sebamed",
+  "license": "ISC",
+  "dependencies": {
+    "express": "^4.16.4",
+    "socket.io": "^2.2.0"
+  }
+}
