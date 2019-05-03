@@ -41,7 +41,6 @@ class Login extends React.Component {
                                             type='email'
                                             name='email'
                                             placeholder='Your e-mail'
-                                            className="input-text with-border"
                                             autoComplete='email'
                                             autoFocus={true}
                                         />

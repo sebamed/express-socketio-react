@@ -1,12 +1,22 @@
 import React from 'react';
-import { Avatar } from 'antd';
+import { Avatar, Tooltip } from 'antd';
 
-const ChatFeed = props => {
+class ChatFeed extends React.Component {
 
-    const renderChatMessages = () => {
-        const { messages, email } = props;
-        console.log(messages)
-        console.log(email)
+    componentDidMount() {
+        this.scrollToBottom();
+    }
+
+    componentDidUpdate() {
+        this.scrollToBottom();
+    }
+
+    scrollToBottom = () => {
+        this.messagesEnd.scrollIntoView({ behavior: 'smooth' });
+    }
+
+    renderChatMessages = () => {
+        const { messages, email } = this.props;
 
         return messages.map((message, i) => {
             return (
@@ -21,10 +31,12 @@ const ChatFeed = props => {
                         </div>
                         :
                         // display message with avatar
-                        <div className="message message-with-avatar">                       
-                            <Avatar style={{ backgroundColor: '#008cba', verticalAlign: 'middle' }} size="large">
-                                <span>{message.user.email.toString().substring(0, 2).toUpperCase()}</span>
-                            </Avatar>
+                        <div className="message message-with-avatar">
+                            <Tooltip placement={message.user.email == email ? 'topRight' : 'topLeft'} title={message.user.email}>
+                                <Avatar style={{ backgroundColor: '#008cba', verticalAlign: 'middle' }} size="large">
+                                    <span>{message.user.email.toString().substring(0, 2).toUpperCase()}</span>
+                                </Avatar>
+                            </Tooltip>
                             <div className="text">
                                 {message.message}
                             </div>
@@ -35,11 +47,16 @@ const ChatFeed = props => {
         });
     }
 
-    return (
-        <div className="chat-feed-container">
-            {renderChatMessages()}
-        </div>
-    );
+    render() {
+        return (
+            <div className="chat-feed-container">
+                {this.renderChatMessages()}
+                <div style={{ float: "left", clear: "both" }}
+                    ref={(el) => { this.messagesEnd = el; }}>
+                </div>
+            </div>
+        );
+    }
 
 }
 

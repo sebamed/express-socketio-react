@@ -12,22 +12,7 @@ class ChatContainer extends React.Component {
         this.state = {
             onlineUsers: [],
             email: this.props.location.state.email,
-            messages: [
-                { user: { email: 'seba.med@yahoo.com' }, message: 'This is my first message!' },
-                { user: { email: 'seba.med@yahoo.com' }, message: 'This is my second message!' },
-                { user: { email: 'teba.med@yahoo.com' }, message: 'This is my new message!' },
-                { user: { email: 'teba.med@yahoo.com' }, message: 'This is my last message!' },
-                { user: { email: 'seba.med@yahoo.com' }, message: 'This is my first message!' },
-                { user: { email: 'seba.med@yahoo.com' }, message: 'This is my second message!' },
-                { user: { email: 'teba.med@yahoo.com' }, message: 'This is my new message!' },
-                { user: { email: 'teba.med@yahoo.com' }, message: 'This is my last message!' },
-                { user: { email: 'seba.med@yahoo.com' }, message: 'This is my first message!' },
-                { user: { email: 'seba.med@yahoo.com' }, message: 'This is my second message!' },
-                { user: { email: 'seba.med@yahoo.com' }, message: 'This is my second message!' },
-                { user: { email: 'seba.med@yahoo.com' }, message: 'This is my second message!' },
-                { user: { email: 'teba.med@yahoo.com' }, message: 'This is my new message!' },
-                { user: { email: 'teba.med@yahoo.com' }, message: 'This is my last message!' },
-            ]
+            messages: []
         }
     }
 
@@ -50,6 +35,14 @@ class ChatContainer extends React.Component {
             this.setState({ onlineUsers: users });
         });
 
+        socket.on('new-public-message', data => {
+            const { user, message } = data;
+
+            this.setState({
+                messages: [...this.state.messages, { user, message }]
+            })
+        })
+
         // Commented out for development testing purposes
         // window.addEventListener("beforeunload", this.onUnload.bind(this));
     }
@@ -68,13 +61,23 @@ class ChatContainer extends React.Component {
         socket.emit('force-disconnect', { email });
     }
 
+    handleAddMessage(message) {
+        const { email } = this.state;
+        const { socket } = this.props;
+
+        socket.emit('push-public-message', {
+            user: { email },
+            message
+        });
+    }
+
     render() {
         const { onlineUsers, email, messages } = this.state;
 
         return (
             <Layout>
                 <OnlineUsers email={email} onlineUsers={onlineUsers} />
-                <ChatLayout messages={messages} email={email} />
+                <ChatLayout addMessage={(message) => this.handleAddMessage(message)} messages={messages} email={email} />
             </Layout>
         );
     }

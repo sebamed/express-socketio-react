@@ -23,6 +23,7 @@ io.on('connection', socket => {
     console.log(`Connected: ${socket.id}`);
 
     var connectionSocket = require('./sockets/connection')(io, socket)
+    var publicChatSocket = require('./sockets/public-chat')(io, socket)
 
 });
 

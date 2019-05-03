@@ -10,7 +10,7 @@ const OnlineUsers = props => {
             return (
                 <Menu.Item key={user.email}>
                     <Icon type="user" />
-                    <span className="nav-text">{user.email} (YOU)</span>
+                    <span className="nav-text">{user.email} {user.email == email ? '(YOU)' : ''}</span>
                     <div className="online-status"></div>
                 </Menu.Item>
             )
@@ -19,7 +19,7 @@ const OnlineUsers = props => {
 
     return (
         <Layout.Sider collapsible width={300} style={{
-            overflow: 'auto',  height: '100vh', position: 'relative', left: 0,
+            overflow: 'auto', height: '100vh', position: 'relative', left: 0,
         }}>
             <Menu theme="dark" mode="inline" defaultSelectedKeys={['1']}>
                 {renderOnlineUsers()}
