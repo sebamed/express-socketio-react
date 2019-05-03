@@ -8,7 +8,7 @@ class Login extends React.Component {
 
     handleSubmit = (values) => {
         this.props.goOnline(values.email)
-        this.props.history.push('/chat-app')
+        this.props.history.push({ pathname: '/chat-app', state: { email: values.email } });
     }
 
     render() {

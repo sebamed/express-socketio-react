@@ -16,4 +16,10 @@ module.exports = (io, socket) => {
         io.sockets.emit('online-users', onlineUsers);
     })
 
+    socket.on('force-disconnect', data => {
+        socket.disconnect();
+        delete onlineUsers[data.email];
+        io.sockets.emit('online-users', onlineUsers);
+    })
+
 };
