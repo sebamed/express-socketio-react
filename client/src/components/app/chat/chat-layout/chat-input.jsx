@@ -7,37 +7,40 @@ const ChatInput = props => {
 
     const handleSubmit = values => {
         props.addMessage(values.chat);
-        props.form.setFieldsValue({chat: ''});
+        props.form.setFieldsValue({ chat: '' });
     }
 
     return (
-        <Form style={{ position: 'relative' }} onSubmit={(e) => checkForm(e, props.form, handleSubmit)}>
+        <Form onSubmit={(e) => checkForm(e, props.form, handleSubmit)}>
             <div className='chat-form'>
-                <BasicField
-                    name='chat'
-                    hasFeedback
-                    rules={[
-                        {
-                            required: true,
-                            message: 'Please write a message!'
-                        }
-                    ]}
-                    form={props.form}
-                    Component={(
-                        <Input.TextArea
-                            id='chat'
-                            type='text'
-                            name='chat'
-                            rows='3'
-                            maxLength='150'
-                            className='chat-form-input'
-                            placeholder='Your e-mail'
-                            autoComplete={null}
-                            autoFocus={true}
-                        />
-                    )}
-                />
+                <div className="chat-form-input">
+                    <BasicField
+                        name='chat'
+                        hasFeedback
+                        rules={[
+                            {
+                                required: true,
+                                message: 'Please write a message!'
+                            }
+                        ]}
+                        form={props.form}
+                        Component={(
+                            <Input.TextArea
+                                id='chat'
+                                type='text'
+                                name='chat'
+                                rows='3'
+                                maxLength='150'
+                                placeholder='Your e-mail'
+                                autoComplete={null}
+                                autoFocus={true}
+                            />
+                        )}
+                    />
+                </div>
+                <div className="chat-form-submit">
                 <Button className='chat-form-button' type='primary' htmlType='submit'>Send <Icon type="right" /></Button>
+                </div>
             </div>
         </Form>
     )
