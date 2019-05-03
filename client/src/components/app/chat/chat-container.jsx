@@ -2,6 +2,7 @@ import React from 'react';
 import { Layout } from 'antd';
 import { withRouter } from 'react-router-dom';
 import OnlineUsers from './online-users/online-users';
+import ChatLayout from './chat-layout/chat-layout';
 
 class ChatContainer extends React.Component {
 
@@ -10,7 +11,13 @@ class ChatContainer extends React.Component {
 
         this.state = {
             onlineUsers: [],
-            email: this.props.location.state.email
+            email: this.props.location.state.email,
+            messages: [
+                { user: { email: 'seba.med@yahoo.com' }, message: 'This is my first message!' },
+                { user: { email: 'seba.med@yahoo.com' }, message: 'This is my second message!' },
+                { user: { email: 'teba.med@yahoo.com' }, message: 'This is my new message!' },
+                { user: { email: 'teba.med@yahoo.com' }, message: 'This is my last message!' },
+            ]
         }
     }
 
@@ -33,11 +40,12 @@ class ChatContainer extends React.Component {
             this.setState({ onlineUsers: users });
         });
 
-        window.addEventListener("beforeunload", this.onUnload.bind(this));
+        // Commented out for development testing purposes
+        // window.addEventListener("beforeunload", this.onUnload.bind(this));
     }
 
     componentWillUnmount() {
-        window.removeEventListener("beforeunload", this.onUnload.bind(this));
+        // window.removeEventListener("beforeunload", this.onUnload.bind(this));
     }
 
     onUnload(e) {
@@ -48,16 +56,15 @@ class ChatContainer extends React.Component {
         console.log(email)
 
         socket.emit('force-disconnect', { email });
-
-        e.returnValue = 'test'
     }
 
     render() {
-        const { onlineUsers } = this.state;
+        const { onlineUsers, email, messages } = this.state;
 
         return (
             <Layout>
-                <OnlineUsers onlineUsers={onlineUsers} />
+                <OnlineUsers email={email} onlineUsers={onlineUsers} />
+                <ChatLayout messages={messages} email={email} />
             </Layout>
         );
     }
