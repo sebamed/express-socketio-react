@@ -17,6 +17,16 @@ class ChatContainer extends React.Component {
                 { user: { email: 'seba.med@yahoo.com' }, message: 'This is my second message!' },
                 { user: { email: 'teba.med@yahoo.com' }, message: 'This is my new message!' },
                 { user: { email: 'teba.med@yahoo.com' }, message: 'This is my last message!' },
+                { user: { email: 'seba.med@yahoo.com' }, message: 'This is my first message!' },
+                { user: { email: 'seba.med@yahoo.com' }, message: 'This is my second message!' },
+                { user: { email: 'teba.med@yahoo.com' }, message: 'This is my new message!' },
+                { user: { email: 'teba.med@yahoo.com' }, message: 'This is my last message!' },
+                { user: { email: 'seba.med@yahoo.com' }, message: 'This is my first message!' },
+                { user: { email: 'seba.med@yahoo.com' }, message: 'This is my second message!' },
+                { user: { email: 'seba.med@yahoo.com' }, message: 'This is my second message!' },
+                { user: { email: 'seba.med@yahoo.com' }, message: 'This is my second message!' },
+                { user: { email: 'teba.med@yahoo.com' }, message: 'This is my new message!' },
+                { user: { email: 'teba.med@yahoo.com' }, message: 'This is my last message!' },
             ]
         }
     }
