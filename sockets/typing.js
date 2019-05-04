@@ -2,6 +2,7 @@ var usersTyping = [];
 
 module.exports = (io, socket) => {
 
+    // Listens for start typing event
     socket.on('start-typing', data => {
         const { email } = data;
 
@@ -12,6 +13,7 @@ module.exports = (io, socket) => {
         io.sockets.emit('currently-typing', usersTyping);
     })
 
+    // Listens for end typing event
     socket.on('stop-typing', data => {
         const { email } = data;
 
