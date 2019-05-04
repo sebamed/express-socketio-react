@@ -12,7 +12,8 @@ class ChatContainer extends React.Component {
         this.state = {
             onlineUsers: [],
             email: this.props.location.state.email,
-            messages: []
+            messages: [],
+            typing: []
         }
     }
 
@@ -34,6 +35,10 @@ class ChatContainer extends React.Component {
 
             this.setState({ onlineUsers: users });
         });
+
+        socket.on('currently-typing', data => {
+            this.setState({ typing: data });
+        })
 
         socket.on('new-public-message', data => {
             const { user, message } = data;
@@ -69,15 +74,26 @@ class ChatContainer extends React.Component {
             user: { email },
             message
         });
+
+        socket.emit('stop-typing', { email });
+    }
+
+    handleOnTyping() {
+        const { email, typing } = this.state;
+        const { socket } = this.props;
+
+        if(typing.includes(email)) return;
+
+        socket.emit('start-typing', { email });
     }
 
     render() {
-        const { onlineUsers, email, messages } = this.state;
+        const { onlineUsers, email, messages, typing } = this.state;
 
         return (
             <Layout>
                 <OnlineUsers email={email} onlineUsers={onlineUsers} />
-                <ChatLayout addMessage={(message) => this.handleAddMessage(message)} messages={messages} email={email} />
+                <ChatLayout onTyping={() => this.handleOnTyping()} typing={typing} addMessage={(message) => this.handleAddMessage(message)} messages={messages} email={email} />
             </Layout>
         );
     }

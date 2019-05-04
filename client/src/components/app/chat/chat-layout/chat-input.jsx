@@ -10,6 +10,10 @@ const ChatInput = props => {
         props.form.setFieldsValue({ chat: '' });
     }
 
+    const handleOnChange = e => {
+        props.onTyping();
+    }
+
     return (
         <Form onSubmit={(e) => checkForm(e, props.form, handleSubmit)}>
             <div className='chat-form'>
@@ -27,6 +31,8 @@ const ChatInput = props => {
                         Component={(
                             <Input.TextArea
                                 id='chat'
+                                onChange={(e) => handleOnChange(e)}
+                                onPressEnter={(e) => checkForm(e, props.form, handleSubmit)}
                                 type='text'
                                 name='chat'
                                 rows='3'
