@@ -1,8 +1,9 @@
 import React from 'react';
-import { Layout } from 'antd';
+import { Layout, Menu } from 'antd';
 import { withRouter } from 'react-router-dom';
 import OnlineUsers from './online-users/online-users';
 import ChatLayout from './chat-layout/chat-layout';
+import MyMessages from './my-messages/my-messages';
 
 class ChatContainer extends React.Component {
 
@@ -13,7 +14,12 @@ class ChatContainer extends React.Component {
             onlineUsers: [],
             email: this.props.location.state.email,
             messages: [],
-            typing: []
+            typing: [],
+            rooms: [
+                { id: 1 },
+                { id: 3 },
+                { id: 2 }
+            ]
         }
     }
 
@@ -82,17 +88,18 @@ class ChatContainer extends React.Component {
         const { email, typing } = this.state;
         const { socket } = this.props;
 
-        if(typing.includes(email)) return;
+        if (typing.includes(email)) return;
 
         socket.emit('start-typing', { email });
     }
 
     render() {
-        const { onlineUsers, email, messages, typing } = this.state;
+        const { onlineUsers, email, messages, typing, rooms } = this.state;
 
         return (
             <Layout>
                 <OnlineUsers email={email} onlineUsers={onlineUsers} />
+                <MyMessages rooms={rooms} />
                 <ChatLayout onTyping={() => this.handleOnTyping()} typing={typing} addMessage={(message) => this.handleAddMessage(message)} messages={messages} email={email} />
             </Layout>
         );

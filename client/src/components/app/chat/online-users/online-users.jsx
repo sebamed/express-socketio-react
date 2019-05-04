@@ -19,7 +19,7 @@ const OnlineUsers = props => {
 
     return (
         <Layout.Sider collapsible width={300} style={{
-            overflow: 'auto', height: '100vh', position: 'relative', left: 0,
+            overflow: 'auto', height: '100vh'
         }}>
             <Menu theme="dark" mode="inline" defaultSelectedKeys={['1']}>
                 {renderOnlineUsers()}

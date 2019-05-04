@@ -190,3 +190,37 @@
     font-size: 12px;
     margin-top: -8px;
 }
+
+.room {
+    width: 100%;
+    height: 85px !important;
+    margin: 0 !important;
+}
+
+.room:hover {
+    background-color: #e6f7ff;
+}
+
+.room .avatar {
+    position: absolute;
+    left: 20px;
+    top: 50%;
+    width: 60px;
+    height: 60px;
+    line-height: 60px;
+    background-color: #247EFF;
+    color: #fff;
+    font-size: 20px;
+    border-radius: 50%;
+    text-align: center;
+    transform: translateY(-50%);
+}
+
+.room-info {
+    margin-left: 70px;
+    padding-top: 15px;
+}
+
+.room-info h6 {
+    margin-top: -30px !important;
+}
