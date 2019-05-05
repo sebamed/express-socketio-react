@@ -20,31 +20,41 @@ class ChatFeed extends React.Component {
         const { messages = [] } = room;
 
         return messages.map((message, i) => {
-            return (
-                <div className={`message-container  ${message.from == email ? 'right' : 'left'}`}>
-                    {i > 0 && messages[i - 1].from == message.from ?
-                        // display message without avatar
-                        <div className="message">
-                            <div className="avatar-placeholder"></div>
-                            <div className="text-without-avatar">
-                                {message.message}
-                            </div>
+            if (message.from == 'SERVER') {
+                return (
+                    <div className="message-container">
+                        <div className="server-message">
+                            <p>{message.from}: {message.message}</p>
                         </div>
-                        :
-                        // display message with avatar
-                        <div className="message message-with-avatar">
-                            <Tooltip placement={message.from == email ? 'topRight' : 'topLeft'} title={message.from}>
-                                <Avatar style={{ backgroundColor: '#008cba', verticalAlign: 'middle' }} size="large">
-                                    <span>{message.from.toString().substring(0, 2).toUpperCase()}</span>
-                                </Avatar>
-                            </Tooltip>
-                            <div className="text">
-                                {message.message}
+                    </div>
+                )
+            } else {
+                return (
+                    <div className={`message-container  ${message.from == email ? 'right' : 'left'}`}>
+                        {i > 0 && messages[i - 1].from == message.from ?
+                            // display message without avatar
+                            <div className="message">
+                                <div className="avatar-placeholder"></div>
+                                <div className="text-without-avatar">
+                                    {message.message}
+                                </div>
                             </div>
-                        </div>
-                    }
-                </div>
-            );
+                            :
+                            // display message with avatar
+                            <div className="message message-with-avatar">
+                                <Tooltip placement={message.from == email ? 'topRight' : 'topLeft'} title={message.from}>
+                                    <Avatar style={{ backgroundColor: '#008cba', verticalAlign: 'middle' }} size="large">
+                                        <span>{message.from.toString().substring(0, 2).toUpperCase()}</span>
+                                    </Avatar>
+                                </Tooltip>
+                                <div className="text">
+                                    {message.message}
+                                </div>
+                            </div>
+                        }
+                    </div>
+                );
+            }
         });
     }
 

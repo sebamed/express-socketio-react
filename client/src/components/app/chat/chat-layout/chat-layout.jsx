@@ -6,7 +6,7 @@ import ChatHeader from './chat-header';
 
 
 const ChatLayout = props => {
-    const { messages, email, typing, room } = props;
+    const { messages, email, typing, room} = props;
 
     return (
         <Layout.Content style={{ position: 'relative', height: '100vh' }}>

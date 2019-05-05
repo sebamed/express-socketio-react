@@ -224,3 +224,21 @@
 .room-info h6 {
     margin-top: -30px !important;
 }
+
+.server-message {
+    text-align: center;
+    padding: 5px;
+}
+
+.server-message p {
+    background-color: rgba(216, 234, 247, 0.5);
+    color: #8eafee;
+    height: 35px;
+    line-height: 35px;
+    width: 40%;
+    margin: 0 auto;
+    font-weight: bold;
+    border: 1px solid #8fcffa;
+    font-size: 13px;
+    border-radius: 40px;
+}

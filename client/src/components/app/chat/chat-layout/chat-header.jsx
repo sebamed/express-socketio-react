@@ -7,7 +7,7 @@ const ChatHeader = props => {
         <div className="chat-header">
             <div className="title">
                 <h3>
-                    {room.name}
+                    {room.name} 
                 </h3>
                 <h6>
                     {typing.map((email, i) => {

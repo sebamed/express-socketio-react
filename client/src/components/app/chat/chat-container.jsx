@@ -17,11 +17,7 @@ class ChatContainer extends React.Component {
             typing: [],
             rooms: [
                 {
-                    id: 0, from: 'everyone', to: 'everyone', name: 'Public Room', messages: [
-                        { from: 'email', message: 'Testing testing 1' },
-                        { from: 'email', message: 'Testing testing 2' },
-                        { from: 'email', message: 'Testing testing 3' },
-                    ]
+                    id: 0, from: 'everyone', to: 'everyone', name: 'Public Room', messages: []
                 },
             ],
             room: {},
@@ -32,13 +28,21 @@ class ChatContainer extends React.Component {
         const { socket } = this.props;
         const { email } = this.state;
 
-        this.setState({room: this.state.rooms[0]});
+        this.setState({ room: this.state.rooms[0] });
 
         if (!email) {
             this.props.history.push('/');
         }
 
         socket.emit('get-online-users');
+        socket.emit('join-public-message', { email });
+        socket.emit('get-all-public-members');
+
+        socket.on('get-all-public-members', data => {
+            this.setState({
+                publicMembers: data
+            });
+        });
 
         socket.on('online-users', onlineUsers => {
             let users = []
@@ -69,22 +73,19 @@ class ChatContainer extends React.Component {
         })
 
         socket.on('new-private-message', data => {
-            const { from, message, id } = data;
-
-            console.log(data)
-            console.log(this.state.rooms)
+            const { from, id } = data;
 
             let rooms = this.state.rooms;
 
-            for(let room of rooms) {
-                if(room.id == id) {
-                    room.messages.push({ from, message: data.message});
+            for (let room of rooms) {
+                if (room.id == id) {
+                    room.messages.push({ from, message: data.message });
                     room.id = id;
                     return;
                 }
 
-                if(room.from == from) {
-                    room.messages.push({ from, message: data.message});
+                if (room.from == from) {
+                    room.messages.push({ from, message: data.message });
                     room.id = id;
                     return;
                 }
@@ -92,7 +93,33 @@ class ChatContainer extends React.Component {
 
 
             this.setState({
-                rooms: [...this.state.rooms, { name: from, from: this.state.email, to: from, id, messages: [...[], { from, message: data.message}] }]
+                rooms: [...this.state.rooms, { name: from, from: this.state.email, to: from, id, messages: [...[], { from, message: data.message }] }]
+            });
+        });
+
+        socket.on('public-member-joined', data => {
+            const { email } = data;
+            const { rooms } = this.state;
+
+            let newRooms = rooms;
+            newRooms[0].messages.push({ from: 'SERVER', message: `${email} has joined!` });
+
+
+            this.setState({
+                rooms: newRooms
+            });
+        });
+
+        socket.on('public-member-left', data => {
+            const { email } = data;
+            const { rooms } = this.state;
+
+            let newRooms = rooms;
+            newRooms[0].messages.push({ from: 'SERVER', message: `${email} has left!` });
+
+
+            this.setState({
+                rooms: newRooms
             });
         })
 
@@ -115,7 +142,7 @@ class ChatContainer extends React.Component {
         const { email, room } = this.state;
         const { socket } = this.props;
 
-        if(this.state.room.id === 0) {
+        if (this.state.room.id === 0) {
             socket.emit('push-public-message', {
                 from: email,
                 message
@@ -144,25 +171,33 @@ class ChatContainer extends React.Component {
     handleCreateRoom(user) {
         const { rooms, email } = this.state;
 
-        for(const room of rooms) {
-            if(room.name == user.email) {
+        for (const room of rooms) {
+            if (room.name == user.email) {
                 return;
             }
         }
 
         this.setState({
-            rooms: [...this.state.rooms, { id : null, from: email, to: user.email, name: user.email, messages: [] }]
+            rooms: [...this.state.rooms, { id: null, from: email, to: user.email, name: user.email, messages: [] }]
         });
     }
 
     handleChangeRoom(room) {
+        const { socket } = this.props;
+        const { email } = this.state;
+
         this.setState({
             room: room
-        })
-    } 
-        
+        },
+            () => {
+                if (room.id === 0) socket.emit('join-public-message', { email });
+                else socket.emit('leave-public-message', { email });
+            }
+        )
+    }
+
     render() {
-        const { onlineUsers, email, messages, typing, rooms, room } = this.state;
+        const { onlineUsers, email, messages, typing, rooms, room, publicMembers } = this.state;
 
         return (
             <Layout>
