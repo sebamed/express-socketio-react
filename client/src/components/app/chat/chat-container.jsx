@@ -54,11 +54,46 @@ class ChatContainer extends React.Component {
         })
 
         socket.on('new-public-message', data => {
-            const { user, message } = data;
+            const { from, message } = data;
+
+            let publicRoom = this.state.rooms[0];
+
+            publicRoom.messages.push({ from, message });
+
+            let rooms = this.state.rooms;
+            rooms[0] = publicRoom;
 
             this.setState({
-                messages: [...this.state.messages, { user, message }]
+                rooms: rooms
             })
+        })
+
+        socket.on('new-private-message', data => {
+            const { from, message, id } = data;
+
+            console.log(data)
+            console.log(this.state.rooms)
+
+            let rooms = this.state.rooms;
+
+            for(let room of rooms) {
+                if(room.id == id) {
+                    room.messages.push({ from, message: data.message});
+                    room.id = id;
+                    return;
+                }
+
+                if(room.from == from) {
+                    room.messages.push({ from, message: data.message});
+                    room.id = id;
+                    return;
+                }
+            }
+
+
+            this.setState({
+                rooms: [...this.state.rooms, { name: from, from: this.state.email, to: from, id, messages: [...[], { from, message: data.message}] }]
+            });
         })
 
         // Commented out for development testing purposes
@@ -77,13 +112,22 @@ class ChatContainer extends React.Component {
     }
 
     handleAddMessage(message) {
-        const { email } = this.state;
+        const { email, room } = this.state;
         const { socket } = this.props;
 
-        socket.emit('push-public-message', {
-            user: { email },
-            message
-        });
+        if(this.state.room.id === 0) {
+            socket.emit('push-public-message', {
+                from: email,
+                message
+            });
+        } else {
+            socket.emit('push-private-message', {
+                id: room.id,
+                from: email,
+                to: room.to,
+                message
+            })
+        }
 
         socket.emit('stop-typing', { email });
     }
@@ -97,19 +141,17 @@ class ChatContainer extends React.Component {
         socket.emit('start-typing', { email });
     }
 
-    handleChooseUser(user) {
+    handleCreateRoom(user) {
         const { rooms, email } = this.state;
 
         for(const room of rooms) {
             if(room.name == user.email) {
-                console.log(room)
-                console.log(user.email)
                 return;
             }
         }
 
         this.setState({
-            rooms: [...this.state.rooms, { id : this.state.rooms.length, from: email, to: user.email, name: user.email, messages: [] }]
+            rooms: [...this.state.rooms, { id : null, from: email, to: user.email, name: user.email, messages: [] }]
         });
     }
 
@@ -119,14 +161,12 @@ class ChatContainer extends React.Component {
         })
     } 
         
-    
-
     render() {
         const { onlineUsers, email, messages, typing, rooms, room } = this.state;
 
         return (
             <Layout>
-                <OnlineUsers chooseUser={(user) => this.handleChooseUser(user)} email={email} onlineUsers={onlineUsers} />
+                <OnlineUsers createRoom={(user) => this.handleCreateRoom(user)} email={email} onlineUsers={onlineUsers} />
                 <MyMessages changeRoom={(room) => this.handleChangeRoom(room)} rooms={rooms} />
                 <ChatLayout room={room} onTyping={() => this.handleOnTyping()} typing={typing} addMessage={(message) => this.handleAddMessage(message)} messages={messages} email={email} />
             </Layout>

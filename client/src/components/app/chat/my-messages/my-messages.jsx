@@ -8,10 +8,10 @@ const MyMessages = props => {
 
         return rooms.map(room => {
             return (
-                <Menu.Item key={room.id} className='room'>
+                <Menu.Item key={room.id} className='room' onClick={() => props.changeRoom(room)}>
                     <span className="avatar">{room.name.toString().substring(0,2)}</span>
                     <div className='room-info'>
-                        <h4 className='room-name'>{room.name}</h4>
+                        <h4 className='room-name'>{room.to}</h4>
                         <h6 className="room-last-message">{room.messages.length > 0 ? room.messages[room.messages.length - 1].message : 'No messages yet!'}</h6>
                     </div>
                 </Menu.Item>

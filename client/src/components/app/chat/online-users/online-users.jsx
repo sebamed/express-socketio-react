@@ -8,7 +8,7 @@ const OnlineUsers = props => {
 
         return onlineUsers.map(user => {
             return (
-                <Menu.Item key={user.email} onClick={user.email == email ? () => { } : () => props.chooseUser(user)}>
+                <Menu.Item key={user.email} onClick={user.email == email ? () => { } : () => props.createRoom(user)}>
                     <Icon type="user" />
                     <span className="nav-text">{user.email} {user.email == email ? '(YOU)' : ''}</span>
                     <div className="online-status"></div>

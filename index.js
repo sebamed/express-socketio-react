@@ -25,6 +25,7 @@ io.on('connection', socket => {
     var connectionSocket = require('./sockets/connection')(io, socket)
     var publicChatSocket = require('./sockets/public-chat')(io, socket)
     var typingSocket = require('./sockets/typing')(io, socket)
+    var privateChatSocket = require('./sockets/private-chat')(io, socket)
 
 });
 

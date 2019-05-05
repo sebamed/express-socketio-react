@@ -10,6 +10,7 @@ module.exports = (io, socket) => {
     socket.on('go-online', data => {
         const { email } = data;
         onlineUsers[email] = socket.id;
+        socket.join('public-room');
     });
 
     socket.on('get-online-users', () => {
@@ -20,6 +21,7 @@ module.exports = (io, socket) => {
         socket.disconnect();
         delete onlineUsers[data.email];
         io.sockets.emit('online-users', onlineUsers);
+        socket.leave('public-room');
     })
 
 };
