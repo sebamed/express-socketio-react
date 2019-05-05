@@ -9,10 +9,10 @@ const MyMessages = props => {
         return rooms.map(room => {
             return (
                 <Menu.Item key={room.id} className='room'>
-                    <span className="avatar">se</span>
+                    <span className="avatar">{room.name.toString().substring(0,2)}</span>
                     <div className='room-info'>
-                        <h4 className='room-name'>Public room</h4>
-                        <h6 className="room-last-message">da</h6>
+                        <h4 className='room-name'>{room.name}</h4>
+                        <h6 className="room-last-message">{room.messages.length > 0 ? room.messages[room.messages.length - 1].message : 'No messages yet!'}</h6>
                     </div>
                 </Menu.Item>
             )
@@ -26,8 +26,7 @@ const MyMessages = props => {
         }}>
             <Menu
                 mode="inline"
-                defaultSelectedKeys={['1']}
-                defaultOpenKeys={['sub1']}
+                defaultSelectedKeys={['0']}
                 style={{ height: '100%' }}
             >
                 {renderRoomsMenu()}

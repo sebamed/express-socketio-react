@@ -1,13 +1,13 @@
 import React from 'react';
 
 const ChatHeader = props => {
-    const { typing } = props;
-    console.log(typing)
+    const { typing, room } = props;
+
     return (
         <div className="chat-header">
             <div className="title">
                 <h3>
-                    Public room
+                    {room.name}
                 </h3>
                 <h6>
                     {typing.map((email, i) => {

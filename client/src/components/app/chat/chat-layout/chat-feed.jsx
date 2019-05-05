@@ -16,12 +16,13 @@ class ChatFeed extends React.Component {
     }
 
     renderChatMessages = () => {
-        const { messages, email } = this.props;
+        const { room, email } = this.props;
+        const { messages = [] } = room;
 
         return messages.map((message, i) => {
             return (
-                <div className={`message-container  ${message.user.email == email ? 'right' : 'left'}`}>
-                    {i > 0 && messages[i - 1].user.email == message.user.email ?
+                <div className={`message-container  ${message.from == email ? 'right' : 'left'}`}>
+                    {i > 0 && messages[i - 1].from == message.from ?
                         // display message without avatar
                         <div className="message">
                             <div className="avatar-placeholder"></div>
@@ -32,9 +33,9 @@ class ChatFeed extends React.Component {
                         :
                         // display message with avatar
                         <div className="message message-with-avatar">
-                            <Tooltip placement={message.user.email == email ? 'topRight' : 'topLeft'} title={message.user.email}>
+                            <Tooltip placement={message.from == email ? 'topRight' : 'topLeft'} title={message.from}>
                                 <Avatar style={{ backgroundColor: '#008cba', verticalAlign: 'middle' }} size="large">
-                                    <span>{message.user.email.toString().substring(0, 2).toUpperCase()}</span>
+                                    <span>{message.from.toString().substring(0, 2).toUpperCase()}</span>
                                 </Avatar>
                             </Tooltip>
                             <div className="text">

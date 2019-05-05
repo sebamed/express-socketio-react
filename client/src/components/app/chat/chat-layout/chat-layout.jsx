@@ -6,12 +6,12 @@ import ChatHeader from './chat-header';
 
 
 const ChatLayout = props => {
-    const { messages, email, typing } = props;
+    const { messages, email, typing, room } = props;
 
     return (
         <Layout.Content style={{ position: 'relative', height: '100vh' }}>
-            <ChatHeader typing={typing} />
-            <ChatFeed messages={messages} email={email} />
+            <ChatHeader typing={typing} room={room} />
+            <ChatFeed room={room} messages={messages} email={email} />
             <ChatInput onTyping={() => props.onTyping()} addMessage={(message) => props.addMessage(message)} />
         </Layout.Content>
     )

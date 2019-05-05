@@ -16,16 +16,23 @@ class ChatContainer extends React.Component {
             messages: [],
             typing: [],
             rooms: [
-                { id: 1 },
-                { id: 3 },
-                { id: 2 }
-            ]
+                {
+                    id: 0, from: 'everyone', to: 'everyone', name: 'Public Room', messages: [
+                        { from: 'email', message: 'Testing testing 1' },
+                        { from: 'email', message: 'Testing testing 2' },
+                        { from: 'email', message: 'Testing testing 3' },
+                    ]
+                },
+            ],
+            room: {},
         }
     }
 
     componentDidMount() {
         const { socket } = this.props;
         const { email } = this.state;
+
+        this.setState({room: this.state.rooms[0]});
 
         if (!email) {
             this.props.history.push('/');
@@ -66,9 +73,6 @@ class ChatContainer extends React.Component {
         const { socket } = this.props;
         const { email } = this.state;
 
-        console.log('disconnecting')
-        console.log(email)
-
         socket.emit('force-disconnect', { email });
     }
 
@@ -93,14 +97,38 @@ class ChatContainer extends React.Component {
         socket.emit('start-typing', { email });
     }
 
+    handleChooseUser(user) {
+        const { rooms, email } = this.state;
+
+        for(const room of rooms) {
+            if(room.name == user.email) {
+                console.log(room)
+                console.log(user.email)
+                return;
+            }
+        }
+
+        this.setState({
+            rooms: [...this.state.rooms, { id : this.state.rooms.length, from: email, to: user.email, name: user.email, messages: [] }]
+        });
+    }
+
+    handleChangeRoom(room) {
+        this.setState({
+            room: room
+        })
+    } 
+        
+    
+
     render() {
-        const { onlineUsers, email, messages, typing, rooms } = this.state;
+        const { onlineUsers, email, messages, typing, rooms, room } = this.state;
 
         return (
             <Layout>
-                <OnlineUsers email={email} onlineUsers={onlineUsers} />
-                <MyMessages rooms={rooms} />
-                <ChatLayout onTyping={() => this.handleOnTyping()} typing={typing} addMessage={(message) => this.handleAddMessage(message)} messages={messages} email={email} />
+                <OnlineUsers chooseUser={(user) => this.handleChooseUser(user)} email={email} onlineUsers={onlineUsers} />
+                <MyMessages changeRoom={(room) => this.handleChangeRoom(room)} rooms={rooms} />
+                <ChatLayout room={room} onTyping={() => this.handleOnTyping()} typing={typing} addMessage={(message) => this.handleAddMessage(message)} messages={messages} email={email} />
             </Layout>
         );
     }
