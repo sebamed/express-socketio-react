@@ -3,4 +3,7 @@
 ### Todos:
 - [ ] - Add persistence
 - [x] - Add public chat
-- [ ] - Add 1 on 1 chat
+  - [ ] - Mentions with **@user-email** 
+
+- [x] - Add 1 on 1 chat
+- [ ] - Messages seen system & badges for unseen messages
